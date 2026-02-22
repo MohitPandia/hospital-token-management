@@ -111,9 +111,7 @@ When a token is created for them (by hospital staff at reception or on the docto
 
 - **Framework:** Next.js (App Router recommended).  
 - **Hosting:** Vercel.  
-- **Database (prototype):**  
-  - Easiest for Vercel: **Vercel Postgres** or **Supabase** (Postgres).  
-  - Alternative: **SQLite** with Turso or file-based for local prototype, then move to Postgres for production.  
+- **Database:** **Neon** (Postgres via `@neondatabase/serverless`). Use `DATABASE_URL` (or `POSTGRES_URL`) for local dev and production. Works on Vercel with Neon integration.  
 - **Auth (prototype):**  
   - Hospital login: simple **email + password** (NextAuth.js or similar).  
   - No patient login; access by **unique code** only.  
@@ -168,7 +166,7 @@ Single codebase, single frontend; different entry points and permissions.
 ## 10. Phase 1 (Prototype) — Checklist
 
 - [ ] Next.js app (App Router), Tailwind, ESLint.  
-- [ ] DB: Postgres (Vercel Postgres or Supabase); tables: Hospital, User, Doctor, Token.  
+- [ ] DB: Neon (DATABASE_URL); tables: Hospital, User, Doctor, Token.  
 - [ ] Auth: Register hospital, Login (email + password).  
 - [ ] Dashboard: List doctors, Add doctor.  
 - [ ] Doctor queue: List tokens for today, “Call next”, “Mark current as done”; optional: “Add token” (generates unique code, patient name).  
@@ -197,6 +195,6 @@ Single codebase, single frontend; different entry points and permissions.
 | Patient flow | Search hospital → doctor → enter code (or direct code entry) → see token #, position, **estimated IST visit time**. |
 | Hospital flow | Register → Login → Doctors → Per-doctor token queue (call next, mark done). |
 | Estimate | Based on completed consultation durations; show IST and minutes from now. |
-| Deploy | Vercel; DB Postgres (e.g. Vercel Postgres / Supabase). |
+| Deploy | Vercel; DB Neon (DATABASE_URL). |
 
 If this matches your intent, next step is **development**: scaffold Next.js, DB schema, auth, dashboard, queue actions, patient page, and estimation logic. We can then add Vercel deployment steps when you’re ready.

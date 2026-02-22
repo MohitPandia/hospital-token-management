@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #0d9488;
+  --color-primary-hover: #0f766e;
+  --color-primary-light: #ccfbf1;
+  --color-surface: #ffffff;
+  --color-background: #f0fdfa;
+  --color-background-alt: #e6fffa;
+  --color-text: #134e4a;
+  --color-text-muted: #0f766e;
+  --color-border: #99f6e4;
+  --touch-min: 48px;
+  --radius-card: 16px;
+  --radius-btn: 12px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--color-text);
+  background: var(--color-background);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  padding-left: var(--safe-top);
+  padding-right: env(safe-area-inset-right, 0px);
+  padding-bottom: var(--safe-bottom);
+}
+
+/* 16px minimum on inputs to prevent iOS zoom on focus */
+input,
+select,
+textarea,
+button {
+  font-size: 16px;
+}
+
+/* Touch-friendly interactive elements */
+.touch-target {
+  min-height: var(--touch-min);
+  min-width: var(--touch-min);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-primary {
+  @apply rounded-xl font-semibold transition active:scale-[0.98];
+  background: var(--color-primary);
+  color: white;
+  min-height: var(--touch-min);
+  padding: 0 1.5rem;
+}
+.btn-primary:hover {
+  background: var(--color-primary-hover);
+}
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  @apply rounded-xl font-semibold border-2 transition active:scale-[0.98];
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: var(--color-surface);
+  min-height: var(--touch-min);
+  padding: 0 1.5rem;
+}
+.btn-secondary:hover {
+  background: var(--color-primary-light);
+}
+
+.card {
+  @apply rounded-2xl shadow-sm border border-teal-100/80;
+  background: var(--color-surface);
+}
+
+.input-field {
+  @apply w-full rounded-xl border-2 border-teal-200 bg-white px-4 py-3 text-[16px];
+  min-height: var(--touch-min);
+}
+.input-field:focus {
+  @apply outline-none ring-2 ring-teal-400 border-teal-400;
+}
+
+.label {
+  @apply block text-sm font-medium text-teal-900 mb-2;
+}
