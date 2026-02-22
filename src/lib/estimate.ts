@@ -14,9 +14,9 @@ export async function getAvgConsultationMinutes(doctorId: number): Promise<numbe
   if (rows.length === 0) return DEFAULT_AVG_MINUTES;
   let totalMs = 0;
   let count = 0;
-  for (const r of rows) {
-    const start = r.started_at ? new Date(r.started_at).getTime() : 0;
-    const end = r.ended_at ? new Date(r.ended_at).getTime() : 0;
+  for (const r of rows as Array<{ started_at?: unknown; ended_at?: unknown }>) {
+    const start = r.started_at ? new Date(r.started_at as string).getTime() : 0;
+    const end = r.ended_at ? new Date(r.ended_at as string).getTime() : 0;
     if (end > start) {
       totalMs += end - start;
       count++;

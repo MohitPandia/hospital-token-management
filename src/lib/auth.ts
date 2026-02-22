@@ -1,7 +1,15 @@
 import bcrypt from "bcryptjs";
 import { sql } from "@/lib/db";
 
-export async function findUserByEmail(email: string) {
+export type UserRow = {
+  id?: number;
+  email?: string;
+  password_hash?: string;
+  hospital_id?: number;
+  hospital_name?: string;
+};
+
+export async function findUserByEmail(email: string): Promise<UserRow | null> {
   const { rows } = await sql`
     SELECT u.id, u.email, u.password_hash, u.hospital_id, h.name as hospital_name
     FROM users u
@@ -9,7 +17,7 @@ export async function findUserByEmail(email: string) {
     WHERE u.email = ${email}
     LIMIT 1
   `;
-  return rows[0] ?? null;
+  return (rows[0] as UserRow) ?? null;
 }
 
 export async function verifyPassword(password: string, hash: string) {
@@ -27,7 +35,7 @@ export async function createHospitalAndUser(
     INSERT INTO hospitals (name, contact) VALUES (${hospitalName}, ${contact ?? null})
     RETURNING id
   `;
-  const hospitalId = hospitalRows[0]?.id;
+  const hospitalId = (hospitalRows[0] as { id?: number } | undefined)?.id;
   if (!hospitalId) throw new Error("Failed to create hospital");
 
   await sql`

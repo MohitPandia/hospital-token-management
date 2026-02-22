@@ -30,9 +30,12 @@ export async function POST(
       ORDER BY token_number LIMIT 1
     `;
     if (nextRows.length) {
-      await sql`
-        UPDATE tokens SET status = 'current', started_at = NOW() WHERE id = ${nextRows[0].id}
-      `;
+      const nextId = Number((nextRows[0] as { id?: number }).id);
+      if (Number.isInteger(nextId)) {
+        await sql`
+          UPDATE tokens SET status = 'current', started_at = NOW() WHERE id = ${nextId}
+        `;
+      }
     }
     const { rows } = await sql`
       SELECT t.id, t.token_number, t.patient_name, t.patient_unique_code, t.status

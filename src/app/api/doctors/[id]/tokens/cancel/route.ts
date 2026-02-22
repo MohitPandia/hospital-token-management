@@ -48,7 +48,7 @@ export async function POST(
         { status: 404 }
       );
     }
-    const status = tokenRows[0].status as string;
+    const status = (tokenRows[0] as { status?: string }).status as string;
     if (status !== "waiting" && status !== "current") {
       return NextResponse.json(
         { error: "Only waiting or current tokens can be cancelled" },

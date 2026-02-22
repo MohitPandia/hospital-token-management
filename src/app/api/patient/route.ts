@@ -22,7 +22,17 @@ export async function GET(req: NextRequest) {
       JOIN hospitals h ON h.id = d.hospital_id
       WHERE t.patient_unique_code = ${code} LIMIT 1
     `;
-    const token = rows[0];
+    type TokenRow = {
+      id?: number;
+      doctor_id?: number;
+      date?: unknown;
+      token_number?: number;
+      patient_name?: string | null;
+      doctor_name?: string;
+      hospital_name?: string;
+      status?: string;
+    };
+    const token = rows[0] as TokenRow | undefined;
     if (!token) {
       return NextResponse.json(
         { error: "No token found for this code." },
@@ -43,7 +53,7 @@ export async function GET(req: NextRequest) {
       });
     }
     const doctorId = Number(token.doctor_id);
-    const status = token.status as string;
+    const status = token.status ?? "";
     const { rows: queueRows } = await sql`
       SELECT id, token_number, status FROM tokens
       WHERE doctor_id = ${doctorId} AND date = ${date}
@@ -52,7 +62,7 @@ export async function GET(req: NextRequest) {
     let positionInQueue = 0;
     let found = false;
     for (let i = 0; i < queueRows.length; i++) {
-      const r = queueRows[i];
+      const r = queueRows[i] as { id?: number; status?: string };
       if (r.status === "current" || r.status === "waiting") {
         positionInQueue++;
         if (Number(r.id) === Number(token.id)) {

@@ -15,7 +15,7 @@ export const authOptions: NextAuthOptions = {
         if (!credentials?.email || !credentials?.password) return null;
         await ensureSchema();
         const user = await findUserByEmail(credentials.email);
-        if (!user) return null;
+        if (!user?.password_hash) return null;
         const ok = await verifyPassword(
           credentials.password,
           user.password_hash
